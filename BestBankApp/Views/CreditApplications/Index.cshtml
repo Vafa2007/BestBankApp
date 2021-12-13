@@ -1,0 +1,53 @@
+﻿@using BestBankApp.Services.Helpers
+@model IQueryable<BestBankApp.Models.Credits>
+@{
+    ViewBag.Title = "Credits";
+}
+<h2>Credit applications</h2>
+
+<div class="mb-3">
+    <label>Search by Result</label>
+    @using (Html.BeginForm("Index", "CreditApplications", FormMethod.Post))
+    {<div class="row">
+            <div class="col-4">
+                @Html.DropDownList("result",
+                    new SelectList(Enum.GetValues(typeof(CreditResult))),
+                    "All", new { @class = "form-control" })
+            </div>
+            <div class="col-6"><input type="submit" value="Search" class="btn btn-outline-secondary" /></div>
+        </div>
+    }
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Credit Id</th>
+            <th>Client Id</th>
+            <th>Surname</th>
+            <th>Name</th>
+            <th>Created</th>
+            <th>Resalt</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.ClientId) </td>
+                <td>@Html.DisplayFor(modelItem => item.CLIENTS.Surname)</td>
+                <td>@Html.DisplayFor(modelItem => item.CLIENTS.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreatedAt) </td>
+                <td>
+                    @{var p = item.Result;}
+                    @if (p)
+                    {<span> @Enum.GetName(typeof(CreditResult), CreditResult.Approved)</span>}
+                else
+                {<span> @Enum.GetName(typeof(CreditResult), CreditResult.Denied)</span>}
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
